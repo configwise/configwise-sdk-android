@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/myColorTransparent"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_shape"
+        android:backgroundTint="@color/myColorGrayLight"
+        android:gravity="center"
+        android:padding="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="fitCenter"
+            android:gravity="center"
+            android:padding="10dp"
+            />
+
+        <TextView
+            android:id="@+id/progressIndicatorPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loading_percentage"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="10dp"
+            />
+
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:indeterminateTint="@color/colorAccent"
+            />
+
+    </LinearLayout>
+
+</FrameLayout>

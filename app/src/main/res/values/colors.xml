@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="myColorTransparent">@android:color/transparent</color>
+    <color name="myColorWhite">#ffffff</color>
+    <color name="myColorBlack">#000000</color>
+    <color name="myColorBlackTransparent">#99000000</color>
+    <color name="myColorRed">#ff0000</color>
+    <color name="myColorYellow">#ffc20f</color>
+    <color name="myColorYellowTransparent">#99ffc20f</color>
+    <color name="myColorGray">#797773</color>
+    <color name="myColorGrayTransparent">#99797773</color>
+    <color name="myColorGrayLight">#f4f0e8</color>
+    <color name="myColorGrayLightTransparent">#99f4f0e8</color>
+    <color name="myColorNavBarBackground">#2b2b2b</color>
+
+    <color name="colorPrimary">@color/myColorWhite</color>
+    <color name="colorPrimaryDark">@color/myColorGrayLight</color>
+    <color name="colorAccent">@color/myColorGray</color>
+    <color name="colorAccentInverse">@color/myColorGray</color>
+
+    <!-- @android:color/background_material_light -->
+    <color name="colorBackground">@color/myColorWhite</color>
+    <!-- @android:color/foreground_material_light -->
+    <color name="colorForeground">@color/colorAccent</color>
+
+    <color name="navigationBarColor">@color/myColorNavBarBackground</color>
+    <color name="statusBarColor">@color/myColorNavBarBackground</color>
+
+    <!-- @android:color/primary_text_light -->
+    <color name="textColorPrimary">@color/myColorYellow</color>
+    <!-- @android:color/primary_text_dark -->
+    <color name="textColorPrimaryInverse">@color/myColorYellow</color>
+    <!-- @android:color/secondary_text_light -->
+    <color name="textColorSecondary">@color/myColorYellow</color>
+    <!-- @android:color/secondary_text_dark -->
+    <color name="textColorSecondaryInverse">@color/myColorYellow</color>
+
+    <!-- @android:color/background_light -->
+    <color name="windowBackground">@color/colorBackground</color>
+
+    <color name="colorPositive">@color/myColorYellow</color>
+    <color name="colorNegative">@color/myColorGrayLight</color>
+    <color name="colorNeutral">@color/myColorGrayLight</color>
+
+    <color name="ic_launcher_background">@color/myColorYellow</color>
+</resources>

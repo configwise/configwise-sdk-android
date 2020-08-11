@@ -1,0 +1,54 @@
+<resources>
+<!--    <string name="app_name">ConfigWise Example</string>-->
+
+    <string name="ar_label">AR</string>
+
+    <string name="loading">Loading</string>
+    <string name="loading_percentage">Loading %s</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="tryAgain">Try again</string>
+    <string name="done">DONE</string>
+    <string name="error">ERROR</string>
+    <string name="error_something_goes_wrong">Oops, something went wrong. Try again.</string>
+    <string name="warning">WARNING</string>
+    <string name="authorization">Authorization</string>
+    <string name="unauthorized_message">Authorization failed.</string>
+    <string name="invocation_canceled">Invocation has been canceled.</string>
+    <string name="share">Share</string>
+    <string name="default_searching_hint">What are you searching for?</string>
+
+    <string name="product_confirm_downloading_title">Download the product</string>
+    <string name="product_confirm_downloading_message">It will be possible to see the product after downloading.\nThe total size of downloading content is %s.\nDo you want to download this now?</string>
+    <string name="product_information"><b>Product info</b></string>
+
+    <string name="sceneform_incompatible_title">SORRY</string>
+    <string name="sceneform_incompatible_message">Unsupported device - AR and 3D features not available.\nAndroid Nougat 7.0 (or later) and OpenGL ES 3.0 (or later) are required.</string>
+
+    <string name="product_is_null">Product is null</string>
+    <string name="product_unsupported">Product is not supported</string>
+
+    <string name="component_model_no_model">There is no attached 3D model in this product.</string>
+    <string name="component_model_loading_canceled">Model loading has been canceled.</string>
+    <string name="component_model_loading_not_completed">Model loading not completed.</string>
+    <string name="component_model_loading_error">Model loading failed due error: %s</string>
+    <string name="component_no_product_info_uri">No information about this product.</string>
+
+    <string name="ar_plane_discovery_instruction_help_message_keep_moving">Point your phone at an angle towards your floor.</string>
+    <string name="ar_plane_discovery_instruction_help_message_space_enough">Make sure there is enough space in your room.</string>
+    <string name="ar_plane_discovery_instruction_help_message_light_enough">Make sure there is enough light in your room.</string>
+    <string name="ar_scan_environment_help_message">Point your phone at an angle towards your floor.</string>
+    <string name="ar_place_product_help_message">
+        Use one finger pan gesture - to move object horizontally.
+        \n\n
+        Use two fingers pan gesture - to move object vertically.
+        \n\n
+        Use two fingers rotation gesture - to rotate object.
+    </string>
+
+    <string name="unsupported_app_version_message">Outdated (unsupported) SDK version. Please update.</string>
+
+    <string name="network_unavailable_message">No network connection. Please, try again.</string>
+</resources>

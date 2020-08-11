@@ -1,0 +1,37 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.1'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+
+        // ConfigWise SDK maven repository
+        maven { url 'https://dl.bintray.com/qdoest/configwise' }
+        // ConfigWise SDK maven repo to download 'real-time updates' related libs
+        maven { url "https://jitpack.io" }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.deprecation = true
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

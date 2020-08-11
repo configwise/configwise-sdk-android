@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="io.configwise.android.sdk_example">
+
+    <!-- Always needed for AR. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Indicates that app requires ARCore ("AR Required"). Ensures the app is
+         visible only in the Google Play Store on devices that support ARCore.
+         For "AR Optional" apps remove this line. -->
+    <uses-feature android:name="android.hardware.camera.ar" />
+
+    <!-- Used to share AR (or Canvas) representations -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- Used to monitor network status (to detect if network available or offline mode) -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Used to access backend via network -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="false"
+        android:hardwareAccelerated="true"
+        tools:ignore="GoogleAppIndexingWarning, LockedOrientationActivity">
+
+        <!-- Indicates that app requires ARCore ("AR Required"). Causes the Google
+             Play Store to download and install Google Play Services for AR along
+             with the app. For an "AR Optional" app, specify "optional" instead of
+             "required".
+        -->
+        <meta-data android:name="com.google.ar.core" android:value="required" />
+
+        <activity
+            android:name=".controllers.main.SplashActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".controllers.auth.SignInActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan"
+            />
+
+        <activity
+            android:name=".controllers.main.MainActivity"
+            android:parentActivityName=".controllers.main.MainActivity"
+            android:label="@string/app_name"
+            />
+
+        <activity
+            android:name=".controllers.ar.ArActivity"
+            android:parentActivityName=".controllers.main.MainActivity"
+            android:label="@string/ar_label"
+            />
+
+        <provider
+            android:name=".providers.GenericFileProvider"
+            android:authorities="${applicationId}.GenericFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+    </application>
+</manifest>

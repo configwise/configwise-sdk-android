@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controllers.ar.ArActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/arFragmentContainerView"
+        android:name="io.configwise.sdk.ar.ArFragment"
+        android:tag="arFragment_tag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <include layout="@layout/view_toolbar_transparent" />
+
+    <LinearLayout
+        android:id="@+id/arPlaneDiscoveryHelpMessage"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="85dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingStart="13dp"
+        android:paddingEnd="13dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
+        android:background="@drawable/rounded_shape"
+        android:backgroundTint="@color/myColorGrayLightTransparent"
+        android:visibility="gone"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/oval_stroke"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ar_plane_discovery_instruction_help_message_keep_moving"
+                android:textSize="12sp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/oval_stroke"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ar_plane_discovery_instruction_help_message_space_enough"
+                android:textSize="12sp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/oval_stroke"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ar_plane_discovery_instruction_help_message_light_enough"
+                android:textSize="12sp"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/arHelpMessageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="85dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingStart="13dp"
+        android:paddingEnd="13dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
+        android:background="@drawable/rounded_shape"
+        android:backgroundTint="@color/myColorGrayLightTransparent"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/arHelpMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/ar_scan_environment_help_message"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:gravity="center"
+            />
+
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
+        android:paddingStart="13dp"
+        android:paddingEnd="13dp"
+        android:gravity="center_vertical"
+        android:background="@color/myColorTransparent"
+        >
+
+        <ImageButton
+            android:id="@+id/productDeleteButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_close"
+            android:tint="@color/myColorWhite"
+            android:scaleType="centerCrop"
+            android:background="@drawable/rounded_shape"
+            android:backgroundTint="@color/myColorBlackTransparent"
+            android:onClick="onClickProductDeleteButton"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/productAddButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_plus"
+            android:tint="@color/myColorWhite"
+            android:scaleType="centerCrop"
+            android:background="@drawable/rounded_shape"
+            android:backgroundTint="@color/myColorBlackTransparent"
+            android:onClick="onClickProductAddButton"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/productConfirmButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_checkmark"
+            android:tint="@color/myColorWhite"
+            android:scaleType="centerCrop"
+            android:background="@drawable/rounded_shape"
+            android:backgroundTint="@color/myColorBlackTransparent"
+            android:onClick="onClickProductConfirmButton"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/productInfoButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_chevron_right"
+            android:tint="@color/myColorWhite"
+            android:scaleType="centerCrop"
+            android:background="@drawable/rounded_shape"
+            android:backgroundTint="@color/myColorBlackTransparent"
+            android:onClick="onClickProductInfoButton"
+            android:visibility="gone"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:colorForeground">@color/colorForeground</item>
+        <item name="android:navigationBarColor">@color/navigationBarColor</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay">
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay.Transparent">
+        <item name="colorPrimary">@color/myColorTransparent</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="android:colorBackground">@color/myColorTransparent</item>
+        <item name="android:colorForeground">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" />
+
+    <style name="AppTheme.PopupOverlay.Transparent">
+        <item name="colorPrimary">@color/myColorTransparent</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="android:colorBackground">@color/myColorTransparent</item>
+        <item name="android:colorForeground">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+    </style>
+
+    <style name="AppTheme.Toolbar_TitleText">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/myColorYellow</item>
+    </style>
+
+    <!--<style name="AppTheme.Dialog" parent="android:Theme.Dialog">-->
+    <style name="AppTheme.Dialog.Alert" parent="@style/Theme.AppCompat.Dialog.Alert">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/myColorTransparent</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/rounded_shape</item>
+        <item name="android:backgroundTint">@color/myColorGray</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:elevation">@dimen/shadow_elevation</item>
+    </style>
+
+    <style name="AppTheme.NeutralButton" parent="@style/AppTheme.Button">
+        <item name="android:background">@drawable/rounded_shape</item>
+        <item name="android:backgroundTint">@color/colorNeutral</item>
+        <item name="android:textColor">@color/myColorBlack</item>
+    </style>
+
+    <style name="AppTheme.NegativeButton" parent="@style/AppTheme.Button">
+        <item name="android:background">@drawable/rounded_shape</item>
+        <item name="android:backgroundTint">@color/colorNegative</item>
+        <item name="android:textColor">@color/myColorBlack</item>
+    </style>
+
+    <style name="AppTheme.PositiveButton" parent="@style/AppTheme.Button">
+        <item name="android:background">@drawable/rounded_shape</item>
+        <item name="android:backgroundTint">@color/colorPositive</item>
+        <item name="android:textColor">@color/myColorBlack</item>
+    </style>
+
+    <style name="AppTheme.ToolbarSearchView" parent="Base.Widget.AppCompat.SearchView">
+        <item name="queryBackground">@null</item>
+        <item name="submitBackground">@null</item>
+        <item name="defaultQueryHint">@string/default_searching_hint</item>
+        <item name="searchIcon">@drawable/ic_search</item>
+        <item name="closeIcon">@drawable/ic_close</item>
+        <item name="goIcon">@drawable/ic_chevron_right</item>
+        <item name="voiceIcon">@drawable/ic_microphone</item>
+        <item name="commitIcon">@drawable/ic_arrow_top_left</item>
+        <item name="searchHintIcon">@null</item>
+    </style>
+
+</resources>
