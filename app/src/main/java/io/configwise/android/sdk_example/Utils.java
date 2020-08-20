@@ -1,6 +1,8 @@
 package io.configwise.android.sdk_example;
 
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,6 +22,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 
 
@@ -122,6 +125,155 @@ public class Utils {
             }
         }
     }
+
+    public interface SuccessDelegate {
+        void onSuccess();
+    }
+
+    public static void expandViewVertical(final View v, int duration, int targetHeight, @Nullable SuccessDelegate successDelegate) {
+        int prevHeight = v.getHeight();
+        v.setVisibility(View.VISIBLE);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(prevHeight, targetHeight);
+        valueAnimator.addUpdateListener(animation -> {
+            v.getLayoutParams().height = (int) animation.getAnimatedValue();
+            v.requestLayout();
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (successDelegate != null) {
+                    successDelegate.onSuccess();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (successDelegate != null) {
+                    successDelegate.onSuccess();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.setDuration(duration);
+        valueAnimator.start();
+    }
+
+    public static void collapseViewVertical(final View v, int duration, int targetHeight, @Nullable SuccessDelegate successDelegate) {
+        int prevHeight = v.getHeight();
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(prevHeight, targetHeight);
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.addUpdateListener(animation -> {
+            v.getLayoutParams().height = (int) animation.getAnimatedValue();
+            v.requestLayout();
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (successDelegate != null) {
+                    successDelegate.onSuccess();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (successDelegate != null) {
+                    successDelegate.onSuccess();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.setDuration(duration);
+        valueAnimator.start();
+    }
+
+    public static void expandViewHorizontal(final View v, int duration, int targetWidth, @Nullable SuccessDelegate successDelegate) {
+        int prevWidth = v.getWidth();
+        v.setVisibility(View.VISIBLE);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(prevWidth, targetWidth);
+        valueAnimator.addUpdateListener(animation -> {
+            v.getLayoutParams().width = (int) animation.getAnimatedValue();
+            v.requestLayout();
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (successDelegate != null) {
+                    successDelegate.onSuccess();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (successDelegate != null) {
+                    successDelegate.onSuccess();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.setDuration(duration);
+        valueAnimator.start();
+    }
+
+    public static void collapseViewHorizontal(final View v, int duration, int targetWidth, @Nullable SuccessDelegate successDelegate) {
+        int prevWidth = v.getWidth();
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(prevWidth, targetWidth);
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.addUpdateListener(animation -> {
+            v.getLayoutParams().width = (int) animation.getAnimatedValue();
+            v.requestLayout();
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (successDelegate != null) {
+                    successDelegate.onSuccess();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (successDelegate != null) {
+                    successDelegate.onSuccess();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.setDuration(duration);
+        valueAnimator.start();
+    }
+
 
     public static boolean isDebug() {
         return "debug".equalsIgnoreCase(BuildConfig.BUILD_TYPE);

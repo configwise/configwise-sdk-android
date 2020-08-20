@@ -29,6 +29,7 @@
 
     <string name="product_is_null">Product is null</string>
     <string name="product_unsupported">Product is not supported</string>
+    <string name="product_n_variances_available">%d variances available</string>
 
     <string name="component_model_no_model">There is no attached 3D model in this product.</string>
     <string name="component_model_loading_canceled">Model loading has been canceled.</string>

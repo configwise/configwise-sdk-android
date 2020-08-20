@@ -6,6 +6,7 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentContainerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
@@ -22,9 +23,9 @@ import io.configwise.android.sdk_example.Utils;
 import io.configwise.android.sdk_example.controllers.ToolbarAwareBaseActivity;
 import io.configwise.sdk.ar.ArFragment;
 import io.configwise.sdk.ar.BaseArFragment;
-import io.configwise.sdk.ar.TransformableNode;
+import io.configwise.sdk.ar.ModelNode;
 import io.configwise.sdk.domain.ComponentEntity;
-import io.configwise.sdk.services.ModelService;
+import io.configwise.sdk.services.ComponentService;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
@@ -35,6 +36,7 @@ public class ArActivity extends ToolbarAwareBaseActivity {
 
     public static final String EXTRA_COMPONENT = ArActivity.class.getName() + ".extra_component";
 
+    @NonNull
     private ArFragment mArFragment;
 
     private FragmentContainerView mArFragmentContainerView;
@@ -45,6 +47,8 @@ public class ArActivity extends ToolbarAwareBaseActivity {
 
     private TextView mHelpMessage;
 
+    private View mProductToolbar;
+
     private ImageButton mProductAddButton;
 
     private ImageButton mProductDeleteButton;
@@ -54,10 +58,19 @@ public class ArActivity extends ToolbarAwareBaseActivity {
     private ImageButton mProductInfoButton;
 
     @Nullable
-    private ComponentEntity mComponent;
+    private ComponentEntity mInitialComponent;
 
-    @Nullable
-    private TransformableNode mModelNode;
+    private boolean mTrayCatalogVisible = false;
+
+    private View mTrayCatalogParentView;
+
+    private View mTrayCatalogContainer;
+
+    private ImageButton mTrayCatalogCloseButton;
+
+    private RecyclerView mTrayCatalogCollectionView;
+
+    private TrayCatalogAdapter mTrayCatalogAdapter;
 
     @Override
     protected int contentViewResId() {
@@ -75,33 +88,46 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         }
 
 
-        mComponent = getIntent().getParcelableExtra(EXTRA_COMPONENT);
-        if (mComponent == null) {
+        mInitialComponent = getIntent().getParcelableExtra(EXTRA_COMPONENT);
+        if (mInitialComponent == null) {
             showMessage(getString(R.string.product_is_null));
             finish();
             return;
         }
-        if (!mComponent.isVisible()) {
+        if (!mInitialComponent.isVisible()) {
             showMessage(getString(R.string.product_unsupported));
             finish();
             return;
         }
 
+        mProductToolbar = findViewById(R.id.productToolbar);
         mProductAddButton = findViewById(R.id.productAddButton);
-        mProductAddButton.setVisibility(View.GONE);
-
         mProductDeleteButton = findViewById(R.id.productDeleteButton);
-        mProductDeleteButton.setVisibility(View.GONE);
-
-        mProductConfirmButton = findViewById(R.id.productDeleteButton);
-        mProductConfirmButton.setVisibility(View.GONE);
-
+        mProductConfirmButton = findViewById(R.id.productConfirmButton);
         mProductInfoButton = findViewById(R.id.productInfoButton);
-        mProductInfoButton.setVisibility(mComponent.isProductUriExist() ? View.VISIBLE : View.GONE);
 
         mPlaneDiscoveryHelpMessage = findViewById(R.id.arPlaneDiscoveryHelpMessage);
         mHelpMessageContainer = findViewById(R.id.arHelpMessageContainer);
         mHelpMessage = findViewById(R.id.arHelpMessage);
+
+        // Setup tray catalog view
+        mTrayCatalogParentView = findViewById(R.id.trayCatalogParent);
+        mTrayCatalogContainer = findViewById(R.id.trayCatalogContainer);
+        mTrayCatalogCloseButton = findViewById(R.id.trayCatalogCloseButton);
+        mTrayCatalogCollectionView = findViewById(R.id.trayCatalogCollectionView);
+        mTrayCatalogAdapter = new TrayCatalogAdapter(this);
+        mTrayCatalogAdapter.setDelegate((component, position, v) -> {
+            mArFragment.addModel(
+                    component,
+                    null,
+                    null,
+                    null,
+                    null,
+                    true
+            );
+            hideTrayCatalog();
+        });
+        mTrayCatalogCollectionView.setAdapter(mTrayCatalogAdapter);
 
         // Setup AR fragment
         mArFragmentContainerView = findViewById(R.id.arFragmentContainerView);
@@ -115,142 +141,80 @@ public class ArActivity extends ToolbarAwareBaseActivity {
 
             // Let's init our AR fragment
             mArFragment.setSelectionVisualizerType(BaseArFragment.SelectionVisualizerType.JUMPING);
+            mArFragment.setDelegate(new ArFragmentDelegate());
+        }
 
-            mArFragment.setDelegate(new ArFragment.Delegate() {
+        // Finally, let's obtain catalog - to show it in the '+' (add product to scene) dialog.
+        obtainCatalog();
+    }
 
-                @Override
-                public void onPlaneDetected(@NonNull Plane plane, @NonNull Anchor anchor) {
-                    if (mComponent == null) {
-                        return;
-                    }
+    public void onClickProductDeleteButton(View view) {
+        ModelNode selectedModel = mArFragment.getSelectedModel();
+        if (selectedModel == null) {
+            return;
+        }
 
-                    if (mModelNode != null) {
-                        return;
-                    }
+        mArFragment.removeModel(selectedModel);
+    }
 
-                    // Attach a node to the anchor with the scene as the parent
-                    AnchorNode anchorNode = new AnchorNode(anchor);
-                    anchorNode.setParent(mArFragment.getArSceneView().getScene());
+    public void onClickProductAddButton(View view) {
+        showTrayCatalog();
+        obtainCatalog();
+    }
 
-                    // Create a new TransformableNode that will carry our object
-                    mModelNode = new TransformableNode(mArFragment.getTransformationSystem());
-                    mModelNode.setFloating(mComponent.isFloating());
-                    mModelNode.setDelegate(new TransformableNode.Delegate() {
-                        @Override
-                        public void onSelected() {
-                            showHelpMessage(
-                                    getString(R.string.ar_place_product_help_message),
-                                    5000
-                            );
-                            mProductAddButton.setVisibility(View.GONE);
-                            mProductConfirmButton.setVisibility(View.VISIBLE);
-                            mProductDeleteButton.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onDeselected() {
-                            mProductAddButton.setVisibility(View.VISIBLE);
-                            mProductConfirmButton.setVisibility(View.GONE);
-                            mProductDeleteButton.setVisibility(View.GONE);
-                        }
-                    });
-                    mModelNode.setParent(anchorNode);
-
-                    mArFragment.hidePlaneDiscoveryInstruction();
-                    mArFragment.setShowPlaneDiscoveryOnResume(false);
-
-                    loadModel(mComponent, mModelNode);
-                }
-
-                @Override
-                public void onPlaneDiscoveryInstructionShown() {
-                    showHelpMessage(getString(R.string.ar_scan_environment_help_message));
-                    new Handler().postDelayed(() -> {
-                        if (mModelNode == null) {
-                            showPlaneDiscoveryHelpMessage();
-                        }
-                    }, 5000);
-                }
-
-                @Override
-                public void onPlaneDiscoveryInstructionHidden() {
-                    hidePlaneDiscoveryHelpMessage();
-                }
-            });
+    public void onClickProductConfirmButton(View view) {
+        ModelNode selectedModel = mArFragment.getSelectedModel();
+        if (selectedModel != null) {
+            selectedModel.deselect();
         }
     }
 
-    private void loadModel(@NonNull ComponentEntity component, @NonNull TransformableNode modelNode) {
+    public void onClickProductInfoButton(View view) {
+        ModelNode selectedModel = mArFragment.getSelectedModel();
+        if (selectedModel == null) {
+            return;
+        }
+
+        ComponentEntity component = selectedModel.getComponent();
+        Uri uri = component.getProductUri();
+        if (uri != null) {
+            showWebView(uri);
+        }
+    }
+
+    public void onClickTrayCatalogCloseButton(View view) {
+        hideTrayCatalog();
+    }
+
+    private void obtainCatalog() {
         showProgressIndicator();
-        ModelService.getInstance().loadComponentModel(this, component)
-                .continueWith(task -> {
+        ComponentService.getInstance().obtainAllComponentsByCurrentCatalog()
+                .onSuccess(task -> {
                     hideProgressIndicator();
-
-                    if (task.isCancelled()) {
-                        showSimpleDialog(
-                                getString(R.string.error),
-                                getString(R.string.component_model_loading_canceled)
-                        );
-                        return null;
-                    }
-                    if (task.isFaulted()) {
-                        Exception e = task.getError();
-                        Log.e(TAG, "Unable to load model due error", e);
-                        showSimpleDialog(
-                                getString(R.string.error),
-                                Utils.isRelease()
-                                        ? getString(R.string.error_something_goes_wrong)
-                                        : getString(R.string.component_model_loading_error, e.getMessage())
-                        );
-                        return null;
-                    }
-                    if (!task.isCompleted()) {
-                        showSimpleDialog(
-                                getString(R.string.error),
-                                getString(R.string.component_model_loading_not_completed)
-                        );
-                        return null;
-                    }
-
-                    modelNode.setRenderable(task.getResult());
-                    modelNode.select();
-
+                    mTrayCatalogAdapter.setDataSource(task.getResult());
                     return null;
                 }, Task.UI_THREAD_EXECUTOR);
     }
 
-    public void onClickProductDeleteButton(View view) {
-        if (mModelNode == null) {
-            return;
-        }
-        mModelNode.deselect();
-        mModelNode.setParent(null);
-        mModelNode = null;
-        mComponent = null;
+    private void refreshUI() {
+        ModelNode selectedModel = mArFragment.getSelectedModel();
 
-        // TODO [smuravev] Implement ArActivity.onClickProductDeleteButton() through invocation of necessary function in the ArFragment
-    }
+        if (selectedModel != null) {
+            ComponentEntity component = selectedModel.getComponent();
 
-    public void onClickProductAddButton(View view) {
-        // TODO [smuravev] Implement ArActivity.onClickProductAddButton()
-    }
-
-    public void onClickProductConfirmButton(View view) {
-        if (mModelNode != null) {
-            mModelNode.deselect();
-        }
-
-        // TODO [smuravev] Implement ArActivity.onClickProductConfirmButton()
-    }
-
-    public void onClickProductInfoButton(View view) {
-        if (mComponent == null) {
-            return;
-        }
-
-        Uri uri = mComponent.getProductUri();
-        if (uri != null) {
-            showWebView(uri);
+            Utils.runOnUiThread(() -> {
+                mProductAddButton.setVisibility(View.GONE);
+                mProductDeleteButton.setVisibility(View.VISIBLE);
+                mProductConfirmButton.setVisibility(View.VISIBLE);
+                mProductInfoButton.setVisibility(component.isProductUriExist() ? View.VISIBLE : View.GONE);
+            });
+        } else {
+            Utils.runOnUiThread(() -> {
+                mProductAddButton.setVisibility(View.VISIBLE);
+                mProductDeleteButton.setVisibility(View.GONE);
+                mProductConfirmButton.setVisibility(View.GONE);
+                mProductInfoButton.setVisibility(View.GONE);
+            });
         }
     }
 
@@ -260,8 +224,10 @@ public class ArActivity extends ToolbarAwareBaseActivity {
 
     private void showHelpMessage(String message, int hideAfterMillis) {
         hidePlaneDiscoveryHelpMessage();
-        mHelpMessage.setText(message);
-        mHelpMessageContainer.setVisibility(View.VISIBLE);
+        Utils.runOnUiThread(() -> {
+            mHelpMessage.setText(message);
+            mHelpMessageContainer.setVisibility(View.VISIBLE);
+        });
 
         if (hideAfterMillis > 0) {
             new Handler().postDelayed(() -> hideHelpMessage(), hideAfterMillis);
@@ -269,8 +235,10 @@ public class ArActivity extends ToolbarAwareBaseActivity {
     }
 
     private void hideHelpMessage() {
-        mHelpMessageContainer.setVisibility(View.GONE);
-        mHelpMessage.setText(null);
+        Utils.runOnUiThread(() -> {
+            mHelpMessageContainer.setVisibility(View.GONE);
+            mHelpMessage.setText(null);
+        });
     }
 
     private void showPlaneDiscoveryHelpMessage() {
@@ -279,7 +247,10 @@ public class ArActivity extends ToolbarAwareBaseActivity {
 
     private void showPlaneDiscoveryHelpMessage(int hideAfterMillis) {
         hideHelpMessage();
-        mPlaneDiscoveryHelpMessage.setVisibility(View.VISIBLE);
+
+        Utils.runOnUiThread(() -> {
+            mPlaneDiscoveryHelpMessage.setVisibility(View.VISIBLE);
+        });
 
         if (hideAfterMillis > 0) {
             new Handler().postDelayed(() -> hidePlaneDiscoveryHelpMessage(), hideAfterMillis);
@@ -287,6 +258,157 @@ public class ArActivity extends ToolbarAwareBaseActivity {
     }
 
     private void hidePlaneDiscoveryHelpMessage() {
-        mPlaneDiscoveryHelpMessage.setVisibility(View.GONE);
+        Utils.runOnUiThread(() -> {
+            mPlaneDiscoveryHelpMessage.setVisibility(View.GONE);
+        });
+    }
+
+    private void showTrayCatalog() {
+        if (mTrayCatalogVisible) {
+            return;
+        }
+
+        hideHelpMessage();
+        hidePlaneDiscoveryHelpMessage();
+        hideProductToolbar();
+
+        Utils.runOnUiThread(() -> {
+            mTrayCatalogCloseButton.setVisibility(View.VISIBLE);
+            int targetHeight = (int) (mTrayCatalogParentView.getHeight() * 0.8);
+            Utils.expandViewVertical(mTrayCatalogContainer, 500, targetHeight, () -> {
+                mTrayCatalogVisible = true;
+            });
+        });
+    }
+
+    private void hideTrayCatalog() {
+        if (!mTrayCatalogVisible) {
+            return;
+        }
+
+        Utils.runOnUiThread(() -> {
+            Utils.collapseViewVertical(mTrayCatalogContainer, 500, 1, () -> {
+                mTrayCatalogCloseButton.setVisibility(View.GONE);
+                mTrayCatalogVisible = false;
+                showProductToolbar();
+            });
+        });
+    }
+
+    private void showProductToolbar() {
+        Utils.runOnUiThread(() -> {
+            mProductToolbar.setVisibility(View.VISIBLE);
+        });
+    }
+
+    private void hideProductToolbar() {
+        Utils.runOnUiThread(() -> {
+            mProductToolbar.setVisibility(View.GONE);
+        });
+    }
+
+    private class ArFragmentDelegate implements ArFragment.Delegate {
+
+        @Override
+        public void onPlaneDetected(@NonNull Plane plane, @NonNull Anchor anchor) {
+            if (mInitialComponent == null) {
+                return;
+            }
+
+            mArFragment.disablePlaneDiscoveryInstruction();
+
+            // Attach a node to the anchor with the scene as the parent
+            final AnchorNode anchorNode = new AnchorNode(anchor);
+            anchorNode.setParent(mArFragment.getArSceneView().getScene());
+
+            mArFragment.addModel(
+                    mInitialComponent,
+                    anchorNode,
+                    null,
+                    null,
+                    null,
+                    true
+            );
+
+            mInitialComponent = null;
+        }
+
+        @Override
+        public void onPlaneDiscoveryInstructionShown() {
+            showHelpMessage(getString(R.string.ar_scan_environment_help_message));
+            new Handler().postDelayed(() -> {
+                if (mInitialComponent != null) {
+                    showPlaneDiscoveryHelpMessage();
+                }
+            }, 5000);
+        }
+
+        @Override
+        public void onPlaneDiscoveryInstructionHidden() {
+            hidePlaneDiscoveryHelpMessage();
+        }
+
+        @Override
+        public void onModelAdded(@NonNull ModelNode model) {
+        }
+
+        @Override
+        public void onModelDeleted(@NonNull ModelNode model) {
+        }
+
+        @Override
+        public void onModelSelected(@NonNull ModelNode model) {
+            refreshUI();
+
+            showHelpMessage(
+                    getString(R.string.ar_place_product_help_message),
+                    5000
+            );
+        }
+
+        @Override
+        public void onModelDeselected(@NonNull ModelNode model) {
+            refreshUI();
+        }
+
+        public void onModelLoadingStarted(@NonNull ModelNode model) {
+            showProgressIndicator();
+        }
+
+        public void onModelLoadingFinished(
+                @NonNull ModelNode model,
+                @Nullable Exception e,
+                boolean cancelled,
+                boolean completed
+        ) {
+            hideProgressIndicator();
+
+            if (e != null) {
+                Log.e(TAG, "Unable to load model due error", e);
+                showSimpleDialog(
+                        getString(R.string.error),
+                        Utils.isRelease()
+                                ? getString(R.string.error_something_goes_wrong)
+                                : getString(R.string.component_model_loading_error, e.getMessage())
+                );
+                return;
+            }
+
+            if (cancelled) {
+                showSimpleDialog(
+                        getString(R.string.error),
+                        getString(R.string.component_model_loading_canceled)
+                );
+                return;
+            }
+
+            if (!completed) {
+                showSimpleDialog(
+                        getString(R.string.error),
+                        getString(R.string.component_model_loading_not_completed)
+                );
+                return;
+            }
+        }
     }
 }
