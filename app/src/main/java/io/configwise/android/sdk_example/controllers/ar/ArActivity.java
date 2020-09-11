@@ -9,12 +9,15 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.ar.core.Anchor;
+import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
+import com.google.ar.core.Session;
 import com.google.ar.sceneform.AnchorNode;
 
 import bolts.Task;
@@ -22,7 +25,7 @@ import io.configwise.android.sdk_example.R;
 import io.configwise.android.sdk_example.Utils;
 import io.configwise.android.sdk_example.controllers.ToolbarAwareBaseActivity;
 import io.configwise.sdk.ar.ArFragment;
-import io.configwise.sdk.ar.BaseArFragment;
+import io.configwise.sdk.ar.ArAdapter;
 import io.configwise.sdk.ar.ModelNode;
 import io.configwise.sdk.domain.ComponentEntity;
 import io.configwise.sdk.services.ComponentService;
@@ -117,7 +120,7 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         mTrayCatalogCollectionView = findViewById(R.id.trayCatalogCollectionView);
         mTrayCatalogAdapter = new TrayCatalogAdapter(this);
         mTrayCatalogAdapter.setDelegate((component, position, v) -> {
-            mArFragment.addModel(
+            mArFragment.getArAdapter().addModel(
                     component,
                     null,
                     null,
@@ -139,8 +142,6 @@ public class ArActivity extends ToolbarAwareBaseActivity {
                 throw new RuntimeException("Unable to find ArFragment with 'arFragment_tag' tag.");
             }
 
-            // Let's init our AR fragment
-            mArFragment.setSelectionVisualizerType(BaseArFragment.SelectionVisualizerType.JUMPING);
             mArFragment.setDelegate(new ArFragmentDelegate());
         }
 
@@ -149,12 +150,14 @@ public class ArActivity extends ToolbarAwareBaseActivity {
     }
 
     public void onClickProductDeleteButton(View view) {
-        ModelNode selectedModel = mArFragment.getSelectedModel();
+        final ArAdapter arAdapter = mArFragment.getArAdapter();
+
+        ModelNode selectedModel = arAdapter.getSelectedModel();
         if (selectedModel == null) {
             return;
         }
 
-        mArFragment.removeModel(selectedModel);
+        arAdapter.removeModel(selectedModel);
     }
 
     public void onClickProductAddButton(View view) {
@@ -163,14 +166,14 @@ public class ArActivity extends ToolbarAwareBaseActivity {
     }
 
     public void onClickProductConfirmButton(View view) {
-        ModelNode selectedModel = mArFragment.getSelectedModel();
+        ModelNode selectedModel = mArFragment.getArAdapter().getSelectedModel();
         if (selectedModel != null) {
             selectedModel.deselect();
         }
     }
 
     public void onClickProductInfoButton(View view) {
-        ModelNode selectedModel = mArFragment.getSelectedModel();
+        ModelNode selectedModel = mArFragment.getArAdapter().getSelectedModel();
         if (selectedModel == null) {
             return;
         }
@@ -197,7 +200,7 @@ public class ArActivity extends ToolbarAwareBaseActivity {
     }
 
     private void refreshUI() {
-        ModelNode selectedModel = mArFragment.getSelectedModel();
+        ModelNode selectedModel = mArFragment.getArAdapter().getSelectedModel();
 
         if (selectedModel != null) {
             ComponentEntity component = selectedModel.getComponent();
@@ -307,7 +310,33 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         });
     }
 
-    private class ArFragmentDelegate implements ArFragment.Delegate {
+    private class ArFragmentDelegate implements ArAdapter.Delegate {
+
+        @Override
+        public void onArSessionInitialized(Session session) {
+            mArFragment.getArAdapter().setSelectionVisualizerType(ArAdapter.SelectionVisualizerType.JUMPING);
+        }
+
+        @Override
+        public void onArError(@NonNull Throwable tr) {
+            showSimpleDialog(
+                    getString(R.string.error),
+                    tr.getMessage()
+            );
+        }
+
+        @Override
+        public void onArCriticalError(@NonNull Throwable tr) {
+            showSimpleDialog(
+                    getString(R.string.error),
+                    "Critical error: " + tr.getMessage(),
+                    ArActivity.this::finish
+            );
+        }
+
+        @Override
+        public void onPlaneTapped(@NonNull HitResult hitResult, @NonNull Plane plane, @NonNull MotionEvent motionEvent) {
+        }
 
         @Override
         public void onPlaneDetected(@NonNull Plane plane, @NonNull Anchor anchor) {
@@ -315,13 +344,15 @@ public class ArActivity extends ToolbarAwareBaseActivity {
                 return;
             }
 
-            mArFragment.disablePlaneDiscoveryInstruction();
+            final ArAdapter arAdapter = mArFragment.getArAdapter();
+
+            arAdapter.disablePlaneDiscoveryInstruction();
 
             // Attach a node to the anchor with the scene as the parent
             final AnchorNode anchorNode = new AnchorNode(anchor);
-            anchorNode.setParent(mArFragment.getArSceneView().getScene());
+            anchorNode.setParent(arAdapter.getArSceneView().getScene());
 
-            mArFragment.addModel(
+            arAdapter.addModel(
                     mInitialComponent,
                     anchorNode,
                     null,
