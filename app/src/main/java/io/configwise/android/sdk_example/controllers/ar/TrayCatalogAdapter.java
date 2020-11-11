@@ -1,7 +1,6 @@
 package io.configwise.android.sdk_example.controllers.ar;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,9 +67,9 @@ public class TrayCatalogAdapter extends RecyclerView.Adapter<TrayCatalogAdapter.
         if (holder.mImageView != null) {
             holder.mImageView.setImageDrawable(null);
 
-            Uri uri = item.getThumbnailFileUri();
-            if (uri != null) {
-                DownloadingService.getInstance().download(uri).onSuccess(task -> {
+            String fileKey = item.getThumbnailFilePath();
+            if (fileKey != null) {
+                DownloadingService.getInstance().download(fileKey).onSuccess(task -> {
                     File file = task.getResult();
                     if (file != null) {
                         Picasso.get()

@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '30.0.1'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
 
     defaultConfig {
         applicationId "io.configwise.android.sdk_example"
 
         // AR Required apps must declare minSdkVersion >= 24.
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         versionCode  1
         versionName '1.0'
@@ -59,13 +59,13 @@ dependencies {
     //
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
 
     //
     // ConfigWiseSDK
     //
-    implementation 'io.configwise:sdk:1.2.9'
+    implementation 'io.configwise:sdk:1.2.10'
 
     //
     // Picasso: https://github.com/square/picasso

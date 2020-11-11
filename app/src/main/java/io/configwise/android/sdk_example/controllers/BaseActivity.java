@@ -110,7 +110,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void onPostSignIn() {
-        ConfigWiseSDK.getInstance().subscribeIfNeeded();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)

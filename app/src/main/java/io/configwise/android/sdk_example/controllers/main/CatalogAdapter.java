@@ -116,9 +116,9 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ItemView
         }
 
         if (holder.mImageView != null) {
-            Uri uri = item.getImageUri();
-            if (uri != null) {
-                DownloadingService.getInstance().download(uri).onSuccess(task -> {
+            String fileKey = item.getImagePath();
+            if (fileKey != null) {
+                DownloadingService.getInstance().download(fileKey).onSuccess(task -> {
                     File file = task.getResult();
                     if (file != null) {
                         final int maxWidth = 1080;
