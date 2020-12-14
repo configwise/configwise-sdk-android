@@ -97,7 +97,7 @@ public class ArActivity extends ToolbarAwareBaseActivity {
             finish();
             return;
         }
-        if (!mInitialComponent.isVisible()) {
+        if (mInitialComponent.isInDraft()) {
             showMessage(getString(R.string.product_unsupported));
             finish();
             return;

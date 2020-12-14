@@ -179,7 +179,7 @@ public class TrayCatalogAdapter extends RecyclerView.Adapter<TrayCatalogAdapter.
                         return false;
                     }
 
-                    return item.isVisible();
+                    return true;
                 })
                 .collect(Collectors.toList());
     }

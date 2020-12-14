@@ -282,29 +282,19 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ItemView
                     if (item == null) {
                         return false;
                     }
+
                     if (!item.isEnabled()) {
                         return false;
                     }
 
-                    if (item.isOverlayImage()) {
-                        return item.isImageExist()
-                                || !item.getLabel().isEmpty()
-                                || !item.getDescription().isEmpty();
-                    }
-                    else if (item.isNavigationItem()) {
-                        return !item.getLabel().isEmpty()
-                                || !item.getDescription().isEmpty();
-                    }
-                    else if (item.isMainProduct()) {
+                    if (item.isMainProduct()) {
                         final ComponentEntity component = item.getComponent();
                         if (component == null) {
                             return false;
                         }
-
-                        return component.isVisible();
                     }
 
-                    return false;
+                    return true;
                 })
                 .collect(toList());
     }
