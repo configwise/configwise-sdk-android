@@ -8,6 +8,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +45,7 @@ import io.configwise.sdk.eventbus.UnsupportedAppVersionEvent;
 import io.configwise.sdk.services.AuthService;
 
 
+@Keep
 public abstract class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = BaseActivity.class.getSimpleName();
@@ -100,6 +103,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Keep
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void onEventSignOut(SignOutEvent event) {
         onPostSignOut();
@@ -112,6 +116,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPostSignIn() {
     }
 
+    @Keep
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void onEventUnsupportedAppVersion(UnsupportedAppVersionEvent event) {
         showSimpleDialog(

@@ -3,6 +3,8 @@ package io.configwise.android.sdk_example.controllers.main;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +33,7 @@ import io.configwise.sdk.services.ComponentService;
 import io.configwise.sdk.services.ModelService;
 
 
+@Keep
 public class MainActivity extends ToolbarAwareBaseActivity {
 
     private final static String TAG = MainActivity.class.getSimpleName();
@@ -224,6 +227,7 @@ public class MainActivity extends ToolbarAwareBaseActivity {
         });
     }
 
+    @Keep
     @Subscribe
     public void onEventAppListItemCreated(AppListItemCreatedEvent event) {
         AppListItemEntity appListItem = event.appListItem;
@@ -238,6 +242,7 @@ public class MainActivity extends ToolbarAwareBaseActivity {
         }
     }
 
+    @Keep
     @Subscribe
     public void onEventAppListItemUpdated(AppListItemUpdatedEvent event) {
         AppListItemEntity appListItem = event.appListItem;
@@ -270,16 +275,19 @@ public class MainActivity extends ToolbarAwareBaseActivity {
         }
     }
 
+    @Keep
     @Subscribe
     public void onEventAppListItemDeleted(AppListItemDeletedEvent event) {
         mCatalogAdapter.removeItem(event.appListItem);
     }
 
+    @Keep
     @Subscribe
     public void onEventComponentUpdated(ComponentUpdatedEvent event) {
         mCatalogAdapter.updateItemsByComponent(event.component, event.component);
     }
 
+    @Keep
     @Subscribe
     public void onEventComponentDeleted(ComponentDeletedEvent event) {
         mCatalogAdapter.updateItemsByComponent(event.component, null);
