@@ -13,6 +13,8 @@ import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -231,7 +233,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
 
             if (task.getResult() == null) {
-                new Handler().postDelayed(AuthService.getInstance()::signOut, postDelayedMillisToSignOut());
+                new Handler(Looper.getMainLooper()).postDelayed(AuthService.getInstance()::signOut, postDelayedMillisToSignOut());
                 return null;
             }
 

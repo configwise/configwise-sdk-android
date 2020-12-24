@@ -65,7 +65,7 @@ dependencies {
     //
     // ConfigWiseSDK
     //
-    implementation 'io.configwise:sdk:1.2.13'
+    implementation 'io.configwise:sdk:1.2.14'
 
     //
     // Picasso: https://github.com/square/picasso

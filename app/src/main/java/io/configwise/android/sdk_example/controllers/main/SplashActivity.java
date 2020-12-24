@@ -1,6 +1,7 @@
 package io.configwise.android.sdk_example.controllers.main;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
 import io.configwise.android.sdk_example.MyApplication;
@@ -47,6 +48,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onPostSignIn() {
         super.onPostSignIn();
-        new Handler().postDelayed(this::gotoMain, 1000);
+        new Handler(Looper.getMainLooper()).postDelayed(this::gotoMain, 1000);
     }
 }

@@ -89,7 +89,7 @@ Add ConfigWise SDK dependency to your project:
         . . .
    
         // ConfigWise SDK
-        implementation "io.configwise:sdk:1.2.13"
+        implementation "io.configwise:sdk:1.2.14"
     } 
     ```
 
@@ -186,142 +186,8 @@ As an example see `activity_ar.xml` in our example code: [app/src/main/res/layou
         />
 ```
 
-Add the following fields to your [ArActivity.java](app/src/main/java/io/configwise/android/sdk_example/controllers/ar/ArActivity.java)
-
-```
-private ArFragment mArFragment;
-
-private FragmentContainerView mArFragmentContainerView;
-
-
-. . .
-
-
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    
-    if (!io.configwise.sdk.Utils.isArCompatible(this)) {
-        showMessage("Unsupported device - AR and 3D features not available.");
-        finish();
-        return;
-    }
-    
-    . . .
-    
-    // Setup AR fragment
-    mArFragmentContainerView = findViewById(R.id.arFragmentContainerView);
-    if (mArFragmentContainerView != null) {
-        mArFragment = (ArFragment) getSupportFragmentManager().findFragmentByTag(
-                (String) mArFragmentContainerView.getTag()
-        );
-        if (mArFragment == null) {
-            throw new RuntimeException("Unable to find ArFragment with 'arFragment_tag' tag.");
-        }
-
-        // Let's init our AR fragment
-        mArFragment.setSelectionVisualizerType(BaseArFragment.SelectionVisualizerType.JUMPING);
-        mArFragment.setDelegate(new ArFragmentDelegate());
-    }
-}
-
-. . .
-
-class ArFragmentDelegate implements ArFragment.Delegate {
-
-    @Override
-    public void onPlaneDetected(@NonNull Plane plane, @NonNull Anchor anchor) {
-        mArFragment.disablePlaneDiscoveryInstruction();
-
-        // Attach a node to the anchor with the scene as the parent
-        final AnchorNode anchorNode = new AnchorNode(anchor);
-        anchorNode.setParent(mArFragment.getArSceneView().getScene());
-
-        mArFragment.addModel(
-                mInitialComponent,
-                anchorNode,
-                null,
-                null,
-                null,
-                true
-        );
-
-        mInitialComponent = null;
-    }
-
-    @Override
-    public void onPlaneDiscoveryInstructionShown() {
-        showHelpMessage("Point your phone at an angle towards your floor.");
-        new Handler().postDelayed(() -> {
-            if (mInitialComponent != null) {
-                showPlaneDiscoveryHelpMessage();
-            }
-        }, 5000);
-    }
-
-    @Override
-    public void onPlaneDiscoveryInstructionHidden() {
-        hidePlaneDiscoveryHelpMessage();
-    }
-
-    @Override
-    public void onModelAdded(@NonNull ModelNode model) {
-    }
-
-    @Override
-    public void onModelDeleted(@NonNull ModelNode model) {
-    }
-
-    @Override
-    public void onModelSelected(@NonNull ModelNode model) {
-        refreshUI();
-    }
-
-    @Override
-    public void onModelDeselected(@NonNull ModelNode model) {
-        refreshUI();
-    }
-
-    public void onModelLoadingStarted(@NonNull ModelNode model) {
-        showProgressIndicator();
-    }
-
-    public void onModelLoadingFinished(
-            @NonNull ModelNode model,
-            @Nullable Exception e,
-            boolean cancelled,
-            boolean completed
-    ) {
-        hideProgressIndicator();
-
-        if (e != null) {
-            Log.e(TAG, "Unable to load model due error", e);
-            showSimpleDialog(
-                    "ERROR",
-                    "Model loading failed due error: " + e.getMessage()
-            );
-            return;
-        }
-
-        if (cancelled) {
-            showSimpleDialog(
-                    "ERROR",
-                    "Model loading has been canceled."
-            );
-            return;
-        }
-
-        if (!completed) {
-            showSimpleDialog(
-                    "ERROR",
-                    "Model loading not completed."
-            );
-            return;
-        }
-    }
-}
-
-```
+See (use) our [ArActivity.java](app/src/main/java/io/configwise/android/sdk_example/controllers/ar/ArActivity.java) as an 
+example to create your own implementation.
 
 
 # Supported 3D file formats

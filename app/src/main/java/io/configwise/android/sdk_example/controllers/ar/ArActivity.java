@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -233,7 +234,7 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         });
 
         if (hideAfterMillis > 0) {
-            new Handler().postDelayed(() -> hideHelpMessage(), hideAfterMillis);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> hideHelpMessage(), hideAfterMillis);
         }
     }
 
@@ -256,7 +257,7 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         });
 
         if (hideAfterMillis > 0) {
-            new Handler().postDelayed(() -> hidePlaneDiscoveryHelpMessage(), hideAfterMillis);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> hidePlaneDiscoveryHelpMessage(), hideAfterMillis);
         }
     }
 
@@ -367,7 +368,7 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         @Override
         public void onPlaneDiscoveryInstructionShown() {
             showHelpMessage(getString(R.string.ar_scan_environment_help_message));
-            new Handler().postDelayed(() -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if (mInitialComponent != null) {
                     showPlaneDiscoveryHelpMessage();
                 }
@@ -380,7 +381,12 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         }
 
         @Override
-        public void onModelAdded(@NonNull ModelNode model) {
+        public void onModelAdded(@NonNull ModelNode model, @Nullable Exception e) {
+            if (e != null) {
+                Log.e(TAG, "Unable to add model due error", e);
+                onArError(e);
+                return;
+            }
         }
 
         @Override
@@ -402,43 +408,19 @@ public class ArActivity extends ToolbarAwareBaseActivity {
             refreshUI();
         }
 
-        public void onModelLoadingStarted(@NonNull ModelNode model) {
-            showProgressIndicator();
-        }
+        private boolean mModelLoadingInProgress = false;
 
-        public void onModelLoadingFinished(
-                @NonNull ModelNode model,
-                @Nullable Exception e,
-                boolean cancelled,
-                boolean completed
-        ) {
-            hideProgressIndicator();
-
-            if (e != null) {
-                Log.e(TAG, "Unable to load model due error", e);
-                showSimpleDialog(
-                        getString(R.string.error),
-                        Utils.isRelease()
-                                ? getString(R.string.error_something_goes_wrong)
-                                : getString(R.string.component_model_loading_error, e.getMessage())
-                );
-                return;
-            }
-
-            if (cancelled) {
-                showSimpleDialog(
-                        getString(R.string.error),
-                        getString(R.string.component_model_loading_canceled)
-                );
-                return;
-            }
-
-            if (!completed) {
-                showSimpleDialog(
-                        getString(R.string.error),
-                        getString(R.string.component_model_loading_not_completed)
-                );
-                return;
+        public void onModelLoadingProgress(@NonNull ModelNode model, double completed) {
+            if (completed < 1.0) {
+                if (!mModelLoadingInProgress) {
+                    showProgressIndicator();
+                    mModelLoadingInProgress = true;
+                }
+            } else {
+                if (mModelLoadingInProgress) {
+                    hideProgressIndicator();
+                    mModelLoadingInProgress = false;
+                }
             }
         }
     }

@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
@@ -161,7 +163,7 @@ public class MainActivity extends ToolbarAwareBaseActivity {
                                                 });
                                             })
                                             .continueWith(task -> {
-                                                new Handler().postDelayed(() -> {
+                                                new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                                     hideProgressIndicatorModal(progressIndicator);
 
                                                     if (task.isCancelled()) {
