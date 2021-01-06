@@ -89,7 +89,7 @@ Add ConfigWise SDK dependency to your project:
         . . .
    
         // ConfigWise SDK
-        implementation "io.configwise:sdk:1.2.14"
+        implementation "io.configwise:sdk:1.2.15"
     } 
     ```
 
