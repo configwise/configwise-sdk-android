@@ -51,3 +51,8 @@
 
 # OkHttp platform used only on JVM and when Conscrypt dependency is available.
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
+
+# NOTE [smuravev] we added this line to avoid obfuscating of CoreComponentFactory,
+#                 to avoid runtime error, like:
+#                 java.lang.ClassNotFoundException: Didn't find class "androidx.core.app.CoreComponentFactory" on path: DexPathList
+-keep class androidx.core.app.CoreComponentFactory { *; }
