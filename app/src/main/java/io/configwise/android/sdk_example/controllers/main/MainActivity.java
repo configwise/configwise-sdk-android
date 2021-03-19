@@ -111,7 +111,7 @@ public class MainActivity extends ToolbarAwareBaseActivity {
                 }
 
                 showProgressIndicator();
-                ComponentService.getInstance().obtainFilesSizeByComponent(component, true).continueWith(task -> {
+                ComponentService.getInstance().obtainTotalSizeByComponent(component, true).continueWith(task -> {
                     hideProgressIndicator();
 
                     if (task.isCancelled()) {

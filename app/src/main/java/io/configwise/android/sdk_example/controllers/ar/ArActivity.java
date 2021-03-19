@@ -27,7 +27,7 @@ import io.configwise.android.sdk_example.Utils;
 import io.configwise.android.sdk_example.controllers.ToolbarAwareBaseActivity;
 import io.configwise.sdk.ar.ArFragment;
 import io.configwise.sdk.ar.ArAdapter;
-import io.configwise.sdk.ar.ModelNode;
+import io.configwise.sdk.ar.ComponentModelNode;
 import io.configwise.sdk.domain.ComponentEntity;
 import io.configwise.sdk.services.ComponentService;
 
@@ -121,7 +121,7 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         mTrayCatalogCollectionView = findViewById(R.id.trayCatalogCollectionView);
         mTrayCatalogAdapter = new TrayCatalogAdapter(this);
         mTrayCatalogAdapter.setDelegate((component, position, v) -> {
-            mArFragment.getArAdapter().addModel(
+            mArFragment.getArAdapter().addComponentModel(
                     component,
                     null,
                     null,
@@ -153,12 +153,12 @@ public class ArActivity extends ToolbarAwareBaseActivity {
     public void onClickProductDeleteButton(View view) {
         final ArAdapter arAdapter = mArFragment.getArAdapter();
 
-        ModelNode selectedModel = arAdapter.getSelectedModel();
-        if (selectedModel == null) {
+        ComponentModelNode selectedComponentModel = arAdapter.getSelectedComponentModel();
+        if (selectedComponentModel == null) {
             return;
         }
 
-        arAdapter.removeModel(selectedModel);
+        arAdapter.removeComponentModel(selectedComponentModel);
     }
 
     public void onClickProductAddButton(View view) {
@@ -167,19 +167,19 @@ public class ArActivity extends ToolbarAwareBaseActivity {
     }
 
     public void onClickProductConfirmButton(View view) {
-        ModelNode selectedModel = mArFragment.getArAdapter().getSelectedModel();
-        if (selectedModel != null) {
-            selectedModel.deselect();
+        ComponentModelNode selectedComponentModel = mArFragment.getArAdapter().getSelectedComponentModel();
+        if (selectedComponentModel != null) {
+            selectedComponentModel.deselect();
         }
     }
 
     public void onClickProductInfoButton(View view) {
-        ModelNode selectedModel = mArFragment.getArAdapter().getSelectedModel();
-        if (selectedModel == null) {
+        ComponentModelNode selectedComponentModel = mArFragment.getArAdapter().getSelectedComponentModel();
+        if (selectedComponentModel == null) {
             return;
         }
 
-        ComponentEntity component = selectedModel.getComponent();
+        ComponentEntity component = selectedComponentModel.getComponent();
         Uri uri = component.getProductUri();
         if (uri != null) {
             showWebView(uri);
@@ -201,10 +201,10 @@ public class ArActivity extends ToolbarAwareBaseActivity {
     }
 
     private void refreshUI() {
-        ModelNode selectedModel = mArFragment.getArAdapter().getSelectedModel();
+        ComponentModelNode selectedComponentModel = mArFragment.getArAdapter().getSelectedComponentModel();
 
-        if (selectedModel != null) {
-            ComponentEntity component = selectedModel.getComponent();
+        if (selectedComponentModel != null) {
+            ComponentEntity component = selectedComponentModel.getComponent();
 
             Utils.runOnUiThread(() -> {
                 mProductAddButton.setVisibility(View.GONE);
@@ -353,7 +353,7 @@ public class ArActivity extends ToolbarAwareBaseActivity {
             final AnchorNode anchorNode = new AnchorNode(anchor);
             anchorNode.setParent(arAdapter.getArSceneView().getScene());
 
-            arAdapter.addModel(
+            arAdapter.addComponentModel(
                     mInitialComponent,
                     anchorNode,
                     null,
@@ -381,20 +381,20 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         }
 
         @Override
-        public void onModelAdded(@NonNull ModelNode model, @Nullable Exception e) {
+        public void onComponentModelAdded(@NonNull ComponentModelNode componentModel, @Nullable Exception e) {
             if (e != null) {
-                Log.e(TAG, "Unable to add model due error", e);
+                Log.e(TAG, "Unable to add componentModel due error", e);
                 onArError(e);
                 return;
             }
         }
 
         @Override
-        public void onModelDeleted(@NonNull ModelNode model) {
+        public void onComponentModelDeleted(@NonNull ComponentModelNode componentModel) {
         }
 
         @Override
-        public void onModelSelected(@NonNull ModelNode model) {
+        public void onComponentModelSelected(@NonNull ComponentModelNode componentModel) {
             refreshUI();
 
             showHelpMessage(
@@ -404,13 +404,14 @@ public class ArActivity extends ToolbarAwareBaseActivity {
         }
 
         @Override
-        public void onModelDeselected(@NonNull ModelNode model) {
+        public void onComponentModelDeselected(@NonNull ComponentModelNode componentModel) {
             refreshUI();
         }
 
         private boolean mModelLoadingInProgress = false;
 
-        public void onModelLoadingProgress(@NonNull ModelNode model, double completed) {
+        @Override
+        public void onComponentModelLoadingProgress(@NonNull ComponentModelNode componentModel, double completed) {
             if (completed < 1.0) {
                 if (!mModelLoadingInProgress) {
                     showProgressIndicator();
