@@ -21,7 +21,7 @@ import com.google.ar.core.Plane;
 import com.google.ar.core.Session;
 import com.google.ar.sceneform.AnchorNode;
 
-import bolts.Task;
+import com.parse.boltsinternal.Task;
 import io.configwise.android.sdk_example.R;
 import io.configwise.android.sdk_example.Utils;
 import io.configwise.android.sdk_example.controllers.ToolbarAwareBaseActivity;

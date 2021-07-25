@@ -5,12 +5,11 @@ import androidx.annotation.Nullable;
 import android.util.Log;
 import android.widget.Button;
 
-import bolts.Task;
+import com.parse.boltsinternal.Task;
 import io.configwise.android.sdk_example.R;
 import io.configwise.android.sdk_example.controllers.ToolbarAwareBaseActivity;
 import io.configwise.sdk.ConfigWiseSDK;
 import io.configwise.sdk.services.AuthService;
-import io.configwise.sdk.services.UnsupportedAppVersionService;
 
 public class SignInActivity extends ToolbarAwareBaseActivity {
 
@@ -47,17 +46,10 @@ public class SignInActivity extends ToolbarAwareBaseActivity {
     private void doSignIn() {
         showProgressIndicator();
         disableForm();
-        UnsupportedAppVersionService.getInstance().isUnsupported().onSuccessTask(task -> {
-            final boolean isUnsupported = task.getResult();
-            if (isUnsupported) {
-                return Task.forError(new RuntimeException(getString(R.string.unsupported_app_version_message)));
-            }
-
-            return AuthService.getInstance().signIn(
-                    ConfigWiseSDK.getInstance().getCompanyAuthToken(),
-                    ConfigWiseSDK.getInstance().getCompanyAuthToken()
-            );
-        }).continueWith(task -> {
+        AuthService.getInstance().signIn(
+                ConfigWiseSDK.getInstance().getCompanyAuthToken(),
+                ConfigWiseSDK.getInstance().getCompanyAuthToken()
+        ).continueWith(task -> {
             hideProgressIndicator();
             enableForm();
 

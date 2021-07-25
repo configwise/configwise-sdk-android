@@ -3,12 +3,11 @@
 buildscript {
     repositories {
         google()
-        jcenter()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath 'com.android.tools.build:gradle:4.2.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -18,13 +17,19 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
 
-        // ConfigWise SDK maven repository
-        maven { url 'https://dl.bintray.com/qdoest/configwise' }
-        // ConfigWise SDK maven repo to download 'real-time updates' related libs
+        // ParseLiveQuery-Android
         maven { url "https://jitpack.io" }
+
+        // ConfigWise SDK maven repository
+        maven {
+            url = uri("https://maven.pkg.github.com/configwise/configwise-sdk-android")
+            credentials {
+                username = "configwise"
+                password = "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"
+            }
+        }
     }
 
     tasks.withType(JavaCompile) {

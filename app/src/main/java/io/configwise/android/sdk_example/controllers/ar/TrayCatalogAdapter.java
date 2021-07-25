@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import bolts.Task;
+import com.parse.boltsinternal.Task;
 import io.configwise.android.sdk_example.R;
 import io.configwise.android.sdk_example.Utils;
 import io.configwise.android.sdk_example.controllers.common.ComponentEntityDiffCallback;

@@ -28,22 +28,20 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.parse.boltsinternal.Task;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import bolts.Task;
 import io.configwise.android.sdk_example.R;
 import io.configwise.android.sdk_example.Utils;
 import io.configwise.android.sdk_example.controllers.ar.ArActivity;
 import io.configwise.android.sdk_example.controllers.auth.SignInActivity;
 import io.configwise.android.sdk_example.controllers.main.MainActivity;
-import io.configwise.sdk.ConfigWiseSDK;
 import io.configwise.sdk.domain.AppListItemEntity;
 import io.configwise.sdk.domain.ComponentEntity;
 import io.configwise.sdk.eventbus.SignOutEvent;
-import io.configwise.sdk.eventbus.UnsupportedAppVersionEvent;
 import io.configwise.sdk.services.AuthService;
 
 
@@ -116,18 +114,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void onPostSignIn() {
-    }
-
-    @Keep
-    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-    public void onEventUnsupportedAppVersion(UnsupportedAppVersionEvent event) {
-        showSimpleDialog(
-                getString(R.string.error),
-                getString(R.string.unsupported_app_version_message),
-                () -> {
-                    AuthService.getInstance().signOut();
-                }
-        );
     }
 
     @Override

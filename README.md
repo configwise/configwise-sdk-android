@@ -3,7 +3,11 @@
 This repository contains Android project (code examples) to explain how to use ConfigWiseSDK.
 See more info about ConfigWise service, here: [https://www.configwise.io](https://www.configwise.io)
 
-ConfigWiseSDK (Android) is distributed through bintray: [https://bintray.com/qdoest/configwise/sdk](https://bintray.com/qdoest/configwise/sdk)
+ConfigWiseSDK (Android) is distributed through GitHub Packages:
+
+  + https://maven.pkg.github.com/configwise/configwise-sdk-android
+  
+  + https://github.com/configwise/configwise-sdk-android/packages
 
 The ConfigWiseSDK (Android) is based on [Google ARCore](https://developers.google.com/ar/reference) / [Google SceneForm](https://developers.google.com/sceneform/develop/) stack underhood.
 The architectural design of ConfigWiseSDK hides all boilerplate stuff (of ARCore, SceneForm).
@@ -53,30 +57,25 @@ ConfigWiseSDK requires the following minimal requirements:
 
 Add ConfigWise SDK dependency to your project:
 
-1. Add ConfigWIse SDK maven repos to your repositories list in the `build.gradle` file:
-
-    ```
-    // ConfigWise SDK maven repository
-    maven { url 'https://dl.bintray.com/qdoest/configwise' }
-    
-    // ConfigWise SDK maven repo to download 'real-time updates' related libs
-    maven { url "https://jitpack.io" } 
-    ```
-
-    For example:
+1. Add ConfigWise SDK maven repos to repositories of your `build.gradle` file:
 
     ```
     allprojects {
         repositories {
             google()
-            jcenter()
             mavenCentral()
     
-            // ConfigWise SDK maven repository
-            maven { url 'https://dl.bintray.com/qdoest/configwise' }
-            
-            // ConfigWise SDK maven repo to download 'real-time updates' related libs
+            // ParseLiveQuery-Android (ConfigWise SDK depends on it)
             maven { url "https://jitpack.io" }
+    
+            // ConfigWise SDK maven repository
+            maven {
+                url = uri("https://maven.pkg.github.com/configwise/configwise-sdk-android")
+                credentials {
+                    username = "configwise"
+                    password = "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"
+                }
+            }
         }
     }
     ```
@@ -89,7 +88,7 @@ Add ConfigWise SDK dependency to your project:
         . . .
    
         // ConfigWise SDK
-        implementation "io.configwise:sdk:1.2.18"
+        implementation "io.configwise:sdk:1.4.1"
     } 
     ```
 

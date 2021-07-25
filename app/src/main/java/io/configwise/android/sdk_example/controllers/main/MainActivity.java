@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import bolts.Task;
+import com.parse.boltsinternal.Task;
 import io.configwise.android.sdk_example.R;
 import io.configwise.android.sdk_example.Utils;
 import io.configwise.android.sdk_example.controllers.ToolbarAwareBaseActivity;
