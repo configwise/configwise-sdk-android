@@ -3,11 +3,7 @@
 This repository contains Android project (code examples) to explain how to use ConfigWiseSDK.
 See more info about ConfigWise service, here: [https://www.configwise.io](https://www.configwise.io)
 
-ConfigWiseSDK (Android) is distributed through GitHub Packages:
-
-  + https://maven.pkg.github.com/configwise/configwise-sdk-android
-  
-  + https://github.com/configwise/configwise-sdk-android/packages
+ConfigWiseSDK (Android) is distributed through [JitPack](https://jitpack.io).
 
 The ConfigWiseSDK (Android) is based on [Google ARCore](https://developers.google.com/ar/reference) / [Google SceneForm](https://developers.google.com/sceneform/develop/) stack underhood.
 The architectural design of ConfigWiseSDK hides all boilerplate stuff (of ARCore, SceneForm).
