@@ -19,17 +19,8 @@ allprojects {
         google()
         mavenCentral()
 
-        // ParseLiveQuery-Android
-        maven { url "https://jitpack.io" }
-
         // ConfigWise SDK maven repository
-        maven {
-            url = uri("https://maven.pkg.github.com/configwise/configwise-sdk-android")
-            credentials {
-                username = "configwise"
-                password = "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"
-            }
-        }
+        maven { url "https://jitpack.io" }
     }
 
     tasks.withType(JavaCompile) {

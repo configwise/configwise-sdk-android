@@ -65,7 +65,7 @@ dependencies {
     //
     // ConfigWiseSDK
     //
-    implementation 'io.configwise:sdk:1.4.1'
+    implementation 'org.bitbucket.vipaheldabv:configwise-android:1.4.2'
 
     //
     // Picasso: https://github.com/square/picasso

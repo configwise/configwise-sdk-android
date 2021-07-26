@@ -65,17 +65,8 @@ Add ConfigWise SDK dependency to your project:
             google()
             mavenCentral()
     
-            // ParseLiveQuery-Android (ConfigWise SDK depends on it)
-            maven { url "https://jitpack.io" }
-    
             // ConfigWise SDK maven repository
-            maven {
-                url = uri("https://maven.pkg.github.com/configwise/configwise-sdk-android")
-                credentials {
-                    username = "configwise"
-                    password = "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"
-                }
-            }
+            maven { url "https://jitpack.io" }
         }
     }
     ```
@@ -88,7 +79,7 @@ Add ConfigWise SDK dependency to your project:
         . . .
    
         // ConfigWise SDK
-        implementation "io.configwise:sdk:1.4.1"
+        implementation 'org.bitbucket.vipaheldabv:configwise-android:1.4.2'
     } 
     ```
 
